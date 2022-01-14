@@ -1,16 +1,16 @@
-### Hi there 👋
+Non Fungible doges
 
-<!--
-**nfdoges/nfdoges** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+A DeFi token built on various Blockchain networks to embrace the tech and trend of cross-chain technologies and collectibles. It's aim embraces the tech and brings users closer to the future where they can do anything online.
 
-Here are some ideas to get you started:
+Name: Non-Fungible Doges
+Symbol: NFDS
+Network: BSC
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Social Media links:
+Twitter: https://twitter.com/NFDoges
+
+Telegram: https://t.me/nfdoges
+
+Instagram: https://instagram.com/nfdoges
+
+E-mail: nfdoges@gmail.com
