@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.2;
+pragma solidity ^0.8.7;
 
 /**
  * @dev Interface of the ERC20 standard as defined in the EIP.
@@ -343,8 +343,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
         require(sender != address(0), "ERC20: transfer from the zero address");
         require(recipient != address(0), "ERC20: transfer to the zero address");
 
-        _beforeTokenTransfer(sender, recipient, amount);
-
         uint256 senderBalance = _balances[sender];
         require(senderBalance >= amount, "ERC20: transfer amount exceeds balance");
         unchecked {
@@ -369,9 +367,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     function _mint(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: mint to the zero address");
 
-        _beforeTokenTransfer(address(0), account, amount);
-
-        _totalSupply += amount;
         _balances[account] += amount;
         emit Transfer(address(0), account, amount);
 
@@ -391,8 +386,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      */
     function _burn(address account, uint256 amount) internal virtual {
         require(account != address(0), "ERC20: burn from the zero address");
-
-        _beforeTokenTransfer(account, address(0), amount);
 
         uint256 accountBalance = _balances[account];
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
@@ -445,11 +438,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      *
      * To learn more about hooks, head to xref:ROOT:extending-contracts.adoc#using-hooks[Using Hooks].
      */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual {}
 
     /**
      * @dev Hook that is called after any transfer of tokens. This includes
@@ -746,27 +734,6 @@ abstract contract ERC20Snapshot is ERC20 {
 
     // Update balance and/or total supply snapshots before the values are modified. This is implemented
     // in the _beforeTokenTransfer hook, which is executed for _mint, _burn, and _transfer operations.
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual override {
-        super._beforeTokenTransfer(from, to, amount);
-
-        if (from == address(0)) {
-            // mint
-            _updateAccountSnapshot(to);
-            _updateTotalSupplySnapshot();
-        } else if (to == address(0)) {
-            // burn
-            _updateAccountSnapshot(from);
-            _updateTotalSupplySnapshot();
-        } else {
-            // transfer
-            _updateAccountSnapshot(from);
-            _updateAccountSnapshot(to);
-        }
-    }
 
     function _valueAt(uint256 snapshotId, Snapshots storage snapshots) private view returns (bool, uint256) {
         require(snapshotId > 0, "ERC20Snapshot: id is 0");
@@ -2069,8 +2036,6 @@ interface IERC3156FlashLender {
     ) external returns (bool);
 }
 
-
-
 /**
  * @dev Implementation of the ERC3156 Flash loans extension, as defined in
  * https://eips.ethereum.org/EIPS/eip-3156[ERC-3156].
@@ -2141,8 +2106,8 @@ abstract contract ERC20FlashMint is ERC20, IERC3156FlashLender {
     }
 }
 
-contract NONFUNGIBLEDOGESTOKEN is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, Pausable, ERC20Permit, ERC20Votes, ERC20FlashMint {
-    constructor() ERC20("NON-FUNGIBLE DOGES", "NFDS") ERC20Permit("NON-FUNGIBLE DOGES TOKEN") {
+contract NONFUNGIBLEDOGES is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, ERC20Permit, ERC20Votes, ERC20FlashMint {
+    constructor() ERC20("NON-FUNGIBLE DOGES", "NFDS") ERC20Permit("NON-FUNGIBLE DOGES") {
         _mint(msg.sender, 100000000000 * 10 ** 18);
     }
 
@@ -2150,25 +2115,10 @@ contract NONFUNGIBLEDOGESTOKEN is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, 
         _snapshot();
     }
 
-    function pause() public onlyOwner {
-        _pause();
-    }
-
-    function unpause() public onlyOwner {
-        _unpause();
-    }
-
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        whenNotPaused
-        override(ERC20, ERC20Snapshot)
-    {
-        super._beforeTokenTransfer(from, to, amount);
-    }
 
     // The following functions are overrides required by Solidity.
 
@@ -2192,7 +2142,5 @@ contract NONFUNGIBLEDOGESTOKEN is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, 
     {
         super._burn(account, amount);
     }
-
-    
 
 }
