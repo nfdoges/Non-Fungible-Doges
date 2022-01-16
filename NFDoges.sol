@@ -2142,7 +2142,7 @@ abstract contract ERC20FlashMint is ERC20, IERC3156FlashLender {
 }
 
 contract NONFUNGIBLEDOGESTOKEN is ERC20, ERC20Burnable, ERC20Snapshot, Ownable, Pausable, ERC20Permit, ERC20Votes, ERC20FlashMint {
-    constructor() ERC20("NON-FUNGIBLE DOGES TOKEN", "NFDS") ERC20Permit("NON-FUNGIBLE DOGES TOKEN") {
+    constructor() ERC20("NON-FUNGIBLE DOGES", "NFDS") ERC20Permit("NON-FUNGIBLE DOGES TOKEN") {
         _mint(msg.sender, 100000000000 * 10 ** 18);
     }
 
